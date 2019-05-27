@@ -57,7 +57,7 @@ class Cells():
     def clear_cells(self):
         self.cells=[]
     def clicked(self,x,y):
-        self.cells[x][y].set_value(1)
+        self.cells[x][y].set_value((self.cells[x][y].value+1)%3)
     def create_boad(self,x,y):
         self.clear_cells()
         def l(x, y):
