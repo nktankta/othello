@@ -1,5 +1,5 @@
 import tkinter as tk
-
+from mask import Mask
 class CellBase:
     '''
     Cellの描画のみを行うクラス
@@ -96,6 +96,8 @@ class CellBase:
             self.circle("white")
         elif self.value==2:
             self.circle("black")
+        elif self.value==-1:
+            self.delete()
         else:
             pass
 
@@ -150,6 +152,23 @@ class Cells():
                 self.canvas.tag_bind(cell.id,"<1>",l(i,j))
             self.cells.append(cs)
 
+    def set_cell_value(self,x,y,value):
+        '''
+        指定した位置のCellをvalueに変更する
+        :param x: x位置
+        :param y: y位置
+        :param value: 設定したい値
+        '''
+        self.cells[x][y].set_value(value)
+    def apply_mask(self,mask):
+        '''
+        マスクを適用して盤面を変更する
+        :param mask: np.array型で適用したいマスク
+        '''
+        for i in range(mask.shape[1]):
+            for j in range(mask.shape[0]):
+                self.set_cell_value(i,j,mask[j][i])
+
 def main():
     '''
     テスト用のメソッドで実際の操作はほかのクラスで行う
@@ -161,7 +180,8 @@ def main():
     cells=Cells(canvas,30)
 
     canvas.pack()
-    cells.create_boad(15,10)
+    cells.create_boad(9,10)
+    cells.apply_mask(Mask.hexagon)
     root.mainloop()
 
 if __name__=="__main__":
