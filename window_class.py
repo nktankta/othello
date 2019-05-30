@@ -1,4 +1,5 @@
 import tkinter as tk
+import numpy as np
 from mask import Mask
 class CellBase:
     '''
@@ -115,12 +116,44 @@ class Cells():
         self.canvas=canvas
         self.length=length
         self.cells=[]
+        self.func=lambda x,y:None
+
+    def set_func(self,func):
+        self.func=func
 
     def clear_cells(self):
         '''
         Cellsの初期化
         '''
+        if len(self.cells)==0:
+            return
+        else:
+            for i in self.cells:
+                for j in i:
+                    i.delete()
         self.cells=[]
+
+    def get(self,x,y):
+        '''
+        x,yのセルの情報を返すメソッド
+        :param x: x位置
+        :param y: y位置
+        :return: x,y位置のCell.value
+        '''
+        return self.cells[x][y].value
+
+    def getBoard(self):
+        '''
+        ボード全体の状態を返すメソッド
+        :return: np.array型で盤面の状態
+        '''
+        ls=[]
+        for i in range(self.y):
+            c=[]
+            for j in range(self.x):
+                c.append(self.get(j,i))
+            ls.append(c)
+        return np.array(ls)
 
     def clicked(self,x,y):
         '''
@@ -129,7 +162,8 @@ class Cells():
         :param x: 選択されたCellのx位置
         :param y: 選択されたCellのy位置
         '''
-        self.cells[x][y].set_value((self.cells[x][y].value+1)%3)
+        self.func(x,y)
+        print(self.getBoard())
 
     def create_boad(self,x,y):
         '''
@@ -138,6 +172,8 @@ class Cells():
         :param y: 縦の個数
         '''
         self.clear_cells()
+        self.x=x
+        self.y=y
         def l(x, y):
             return lambda e: self.clicked(x, y)
         for i in range(x):
@@ -160,6 +196,7 @@ class Cells():
         :param value: 設定したい値
         '''
         self.cells[x][y].set_value(value)
+
     def apply_mask(self,mask):
         '''
         マスクを適用して盤面を変更する
