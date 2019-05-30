@@ -180,7 +180,7 @@ def main():
     cells=Cells(canvas,30)
 
     canvas.pack()
-    cells.create_boad(9,10)
+    cells.create_boad(9,9)
     cells.apply_mask(Mask.hexagon)
     root.mainloop()
 
