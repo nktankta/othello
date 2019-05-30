@@ -6,6 +6,15 @@ from Funcs import WinnerFunc as win
 
 class OthelloController:
     def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.alwaysTrue,turnFunc=turn.nextPlayer,winnerFunc=win.more):
+        '''
+        初期化処理
+        :param canvas:Tk.Canvasオブジェクト
+        :param mask: 初期化時に掛けるマスク
+        :param beforeFunc: 盤面作成時に行う関数
+        :param putableFunc: 置けるかどうか判断する関数
+        :param turnFunc: 次のターンのプレイヤーを返す関数
+        :param winnerFunc: 勝者を確定する関数
+        '''
         self.canvas=canvas
         self.cells=Cells(canvas,30)
         self.mask=mask
@@ -13,8 +22,12 @@ class OthelloController:
         self.putable=putableFunc
         self.turn=turnFunc
         self.winner=winnerFunc
+        self.create()
 
     def create(self):
+        '''
+        盤面を作成するメソッド
+        '''
         self.cells.create_boad(9,9)
         self.cells.apply_mask(self.mask)
         self.cells=self.before(self.cells)
@@ -22,15 +35,29 @@ class OthelloController:
         self.player=1
         self.cells.set_func(self.clicked)
 
+    def isPass(self):
+        for i in range(len(self.cells.cells)):
+            for j in range(len(self.cells.cells[i])):
+                if self.putable(self.cells.getBoard(),i,j,self.player)[0]:return False
+        return True
+
+
     def end(self):
         pass
 
     def clicked(self,x,y):
+        '''
+        クリックされたときに呼び出されるメソッド
+        :param x: x位置
+        :param y: y位置
+        :return:
+        '''
         b,c=self.putable(self.cells.getBoard(),x,y,self.player)
         if not b:
-            self.end()
+            pass
         else:
             self.cells.apply_mask(c)
             self.turn_number+=1
-            self.player=self.turn(self.player)
-
+            self.player=self.turn(self.player,self.turn_number)
+            if self.isPass():
+                self.end()

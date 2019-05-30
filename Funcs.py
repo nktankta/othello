@@ -16,7 +16,7 @@ class PutableFuncs:
 
 class TurnFuncs:
     @staticmethod
-    def nextPlayer(value):
+    def nextPlayer(value,turnnum):
         return value%2+1
 
 class WinnerFunc:
