@@ -34,6 +34,7 @@ class OthelloController:
         self.turn_number=0
         self.player=1
         self.cells.set_func(self.clicked)
+        self.isPassed=False
 
     def isPass(self):
         for i in range(len(self.cells.cells)):
@@ -44,6 +45,12 @@ class OthelloController:
 
     def end(self):
         pass
+
+    def pass_(self):
+        if self.isPassed:
+            self.end()
+        else:
+            self.player=self.player%2+1
 
     def clicked(self,x,y):
         '''
@@ -60,4 +67,4 @@ class OthelloController:
             self.turn_number+=1
             self.player=self.turn(self.player,self.turn_number)
             if self.isPass():
-                self.end()
+                self.pass_()
