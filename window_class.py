@@ -29,11 +29,11 @@ class CellBase:
         self.canvas=canvas
         self.px=px
         self.py=py
-        self.id=canvas.create_polygon(CellBase.get_hex_top(px,py,length),fill="green",outline="black")
         self.value=value
         self.cid=-1
         self.len=length
         self.clen=length*0.7
+        self.create_hexagon()
 
     def circle(self,color):
         '''
@@ -44,7 +44,8 @@ class CellBase:
             self.create_circle(fill=color)
         else:
             self.change_color(fill=color)
-
+    def create_hexagon(self,fill="green",outline="black"):
+        self.id=self.canvas.create_polygon(CellBase.get_hex_top(self.px,self.py,self.len),fill=fill,outline=outline)
     def create_circle(self,fill="white"):
         '''
         円を作成する
@@ -75,6 +76,7 @@ class CellBase:
         '''
         if self.id is not -1:
             self.canvas.delete(self.id)
+            self.id=-1
             self.delete_circle()
         else:
             pass
@@ -91,6 +93,8 @@ class CellBase:
         '''
         valueに基づいて再描画するメソッド
         '''
+        if self.id==-1 and self.value!=-1:
+            self.create_hexagon()
         if self.value==0:
             self.delete_circle()
         elif self.value==1:
