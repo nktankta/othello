@@ -12,13 +12,12 @@ class BeforeFuncs():
 class PutableFuncs:
     '''
     設置可能かどうかを返す関数
-    必ず(Boolean,Cells)の状態になるように返す
     '''
     @staticmethod
     def alwaysTrue(cells, x, y,turn):
         c=np.copy(cells)
         c[y][x]=turn
-        return (True,c)
+        return c
 
 
 class TurnFuncs:
@@ -38,11 +37,16 @@ class WinnerFunc:
     '''
     @staticmethod
     def more(cells):
+        '''
+        数が多いほうが勝ち（2人用）
+        :param cells: 置けなくなった盤面
+        :return: 勝者がiの時はiを返す。それ以外の時は0を返す
+        '''
         c=0
         one=np.sum(cells==1)
         two=np.sum(cells==2)
         if one>two:
             c=1
         elif one<two:
-            c=-1
+            c=2
         return c

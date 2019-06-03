@@ -1,4 +1,4 @@
-from window_class import Cells
+from CellBase import Cells
 from Funcs import BeforeFuncs as bef
 from Funcs import PutableFuncs as put
 from Funcs import TurnFuncs as turn
@@ -40,19 +40,32 @@ class OthelloController:
             self.cells.set_cell_value(i,j,k)
 
     def isPass(self):
+        '''
+        パスかどうかを返すメソッド
+        :return: 置けない場合はTrue置ける場合はFalse
+        '''
         for i in range(len(self.cells.cells)):
             for j in range(len(self.cells.cells[i])):
-                if self.putable(self.cells.getBoard(),i,j,self.player)[0]:return False
+                if self.putable(self.cells.getBoard(),i,j,self.player) is not None:
+                    return False
         return True
 
 
     def end(self):
+        '''
+        終了時に呼ばれるメソッドで主に勝敗表示などに使う
+        '''
         pass
 
     def pass_(self):
+        '''
+        パスされた場合に呼ばれるメソッドで、
+        :return:
+        '''
         if self.isPassed:
             self.end()
         else:
+            self.isPassed=True
             self.player=self.player%2+1
 
     def clicked(self,x,y):
@@ -62,8 +75,8 @@ class OthelloController:
         :param y: y位置
         :return:
         '''
-        b,c=self.putable(self.cells.getBoard(),x,y,self.player)
-        if not b:
+        c=self.putable(self.cells.getBoard(),x,y,self.player)
+        if c is None:
             pass
         else:
             self.cells.apply_mask(c)

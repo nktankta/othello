@@ -1,11 +1,11 @@
 import tkinter as tk
 from Othello_Controll import OthelloController as oc
-from mask import Mask
+from Mask import Mask
 def main():
-    root = tk.Tk()
 
+    root = tk.Tk()
     root.geometry("500x500")
-    canvas = tk.Canvas(root, width=800, height=800)
+    canvas = tk.Canvas(root, width=500, height=500)
     c=oc(canvas,Mask.hexagon*Mask.random)
     canvas.pack()
     root.mainloop()

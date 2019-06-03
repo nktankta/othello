@@ -1,6 +1,6 @@
 import tkinter as tk
 import numpy as np
-from mask import Mask
+from Mask import Mask
 class CellBase:
     '''
     Cellの描画のみを行うクラス
@@ -20,7 +20,7 @@ class CellBase:
 
     def __init__(self,canvas,px,py,length,value=0):
         '''
-        初期化処理で六角形も作成するメソッド
+        初期化処理で六角形も作成する
         :param canvas:TK.Canvasオブジェクト
         :param px: 左上x座標
         :param py: 左上y座標
@@ -44,8 +44,16 @@ class CellBase:
             self.create_circle(fill=color)
         else:
             self.change_color(fill=color)
+
     def create_hexagon(self,fill="green",outline="black"):
+        '''
+        六角形を作成するメソッド
+        :param fill: 塗る色
+        :param outline: 外枠の色
+        :return:
+        '''
         self.id=self.canvas.create_polygon(CellBase.get_hex_top(self.px,self.py,self.len),fill=fill,outline=outline)
+
     def create_circle(self,fill="white"):
         '''
         円を作成する
@@ -123,6 +131,10 @@ class Cells():
         self.func=lambda x,y:None
 
     def set_func(self,func):
+        '''
+        クリック時に実行する関数
+        :param func: lamda x,y:process のような形
+        '''
         self.func=func
 
     def clear_cells(self):
@@ -226,21 +238,3 @@ class Cells():
         for i in range(mask.shape[1]):
             for j in range(mask.shape[0]):
                 self.set_cell_value(i,j,mask[j][i])
-
-def main():
-    '''
-    テスト用のメソッドで実際の操作はほかのクラスで行う
-    '''
-    root = tk.Tk()
-
-    root.geometry("800x800")
-    canvas = tk.Canvas(root, width=800, height=800)
-    cells=Cells(canvas,30)
-
-    canvas.pack()
-    cells.create_boad(9,9)
-    cells.apply_mask(Mask.hexagon)
-    root.mainloop()
-
-if __name__=="__main__":
-    main()
