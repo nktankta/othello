@@ -18,7 +18,7 @@ class CellBase:
         l = 0.866
         return x, y, x + length, y, x + 1.5 * length, y +l * length, x + length, y + 2 * l * length, x, y + 2 * l * length, x - 0.5 * length, y + l * length
 
-    def __init__(self,canvas,px,py,length):
+    def __init__(self,canvas,px,py,length,value=0):
         '''
         初期化処理で六角形も作成するメソッド
         :param canvas:TK.Canvasオブジェクト
@@ -30,7 +30,7 @@ class CellBase:
         self.px=px
         self.py=py
         self.id=canvas.create_polygon(CellBase.get_hex_top(px,py,length),fill="green",outline="black")
-        self.value=0
+        self.value=value
         self.cid=-1
         self.len=length
         self.clen=length*0.7
@@ -155,6 +155,19 @@ class Cells():
             ls.append(c)
         return np.array(ls)
 
+    def getVirtualBoard(self):
+        '''
+        ボード全体の実際の状態を返すメソッド
+        :return: np.array型で盤面の状態
+        '''
+        ls=[]
+        for i in range(-1,self.y+1):
+            c=[]
+            for j in range(-1,self.x+1):
+                c.append(self.get(j,i))
+            ls.append(c)
+        return np.array(ls)
+
     def clicked(self,x,y):
         '''
         あるセルが選択されたときに呼ばれるメソッド
@@ -176,9 +189,9 @@ class Cells():
         self.y=y
         def l(x, y):
             return lambda e: self.clicked(x, y)
-        for i in range(x):
+        for i in range(x+1):
             cs=[]
-            for j in range(y):
+            for j in range(y+1):
                 if i%2==0:
                     cell=CellBase(self.canvas,1.5*i*self.length+0.5*self.length,j*self.length*1.732,self.length)
                 else:
@@ -187,6 +200,10 @@ class Cells():
 
                 self.canvas.tag_bind(cell.id,"<1>",l(i,j))
             self.cells.append(cs)
+        for i in range(x+1):
+            self.set_cell_value(i,-1,-1)
+        for i in range(y+1):
+            self.set_cell_value(-1,i,-1)
 
     def set_cell_value(self,x,y,value):
         '''

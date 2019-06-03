@@ -3,6 +3,7 @@ from Funcs import BeforeFuncs as bef
 from Funcs import PutableFuncs as put
 from Funcs import TurnFuncs as turn
 from Funcs import WinnerFunc as win
+import numpy as np
 
 class OthelloController:
     def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.alwaysTrue,turnFunc=turn.nextPlayer,winnerFunc=win.more):
@@ -17,7 +18,7 @@ class OthelloController:
         '''
         self.canvas=canvas
         self.cells=Cells(canvas,30)
-        self.mask=mask
+        self.mask=mask-1
         self.before=beforeFunc
         self.putable=putableFunc
         self.turn=turnFunc
@@ -35,6 +36,8 @@ class OthelloController:
         self.player=1
         self.cells.set_func(self.clicked)
         self.isPassed=False
+        for i,j,k in ((3,3,2),(4,3,1),(5,3,2),(3,4,1),(5,4,1),(4,5,2)):
+            self.cells.set_cell_value(i,j,k)
 
     def isPass(self):
         for i in range(len(self.cells.cells)):
