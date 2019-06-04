@@ -59,7 +59,7 @@ class OthelloController:
 
     def pass_(self):
         '''
-        パスされた場合に呼ばれるメソッドで、
+        パスされた場合に呼ばれるメソッド
         :return:
         '''
         if self.isPassed:
