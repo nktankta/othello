@@ -18,6 +18,17 @@ class PutableFuncs:
         c=np.copy(cells)
         c[y][x]=turn
         return c
+    @staticmethod
+    def NotPlaced(cells,x,y,turn):
+        if cells[y][x]!=0:
+            return None
+        else:
+            ret=np.copy(cells)
+            ret[y][x]=turn
+        return ret
+    @staticmethod
+    def alwaysFalse(cells,x,y,turn):
+        return None
 
 
 class TurnFuncs:

@@ -6,7 +6,7 @@ from Funcs import WinnerFunc as win
 import numpy as np
 
 class OthelloController:
-    def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.alwaysTrue,turnFunc=turn.nextPlayer,winnerFunc=win.more):
+    def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.NotPlaced,turnFunc=turn.nextPlayer,winnerFunc=win.more):
         '''
         初期化処理
         :param canvas:Tk.Canvasオブジェクト
@@ -44,9 +44,9 @@ class OthelloController:
         パスかどうかを返すメソッド
         :return: 置けない場合はTrue置ける場合はFalse
         '''
-        for i in range(len(self.cells.cells)):
-            for j in range(len(self.cells.cells[i])):
-                if self.putable(self.cells.getBoard(),i,j,self.player) is not None:
+        for i in range(self.cells.y):
+            for j in range(self.cells.x):
+                if self.putable(self.cells.getBoard(),j,i,self.player) is not None:
                     return False
         return True
 
@@ -55,6 +55,8 @@ class OthelloController:
         '''
         終了時に呼ばれるメソッドで主に勝敗表示などに使う
         '''
+        print(self.winner(self.cells.getBoard()))
+        exit(0)
         pass
 
     def pass_(self):
@@ -62,11 +64,11 @@ class OthelloController:
         パスされた場合に呼ばれるメソッド
         :return:
         '''
-        if self.isPassed:
+        self.isPassed=True
+        self.player=self.player%2+1
+        if self.isPass():
             self.end()
-        else:
-            self.isPassed=True
-            self.player=self.player%2+1
+
 
     def clicked(self,x,y):
         '''
@@ -76,6 +78,7 @@ class OthelloController:
         :return:
         '''
         c=self.putable(self.cells.getBoard(),x,y,self.player)
+
         if c is None:
             pass
         else:
