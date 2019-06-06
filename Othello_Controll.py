@@ -4,7 +4,9 @@ from Funcs import PutableFuncs as put
 from Funcs import TurnFuncs as turn
 from Funcs import WinnerFunc as win
 import numpy as np
-
+from Player import Player
+import sys
+import threading
 class OthelloController:
     def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.NotPlaced,turnFunc=turn.nextPlayer,winnerFunc=win.more):
         '''
@@ -34,10 +36,16 @@ class OthelloController:
         self.cells=self.before(self.cells)
         self.turn_number=0
         self.player=1
-        self.cells.set_func(self.clicked)
+        self.p1 = Player(1)
+        self.p2 = Player(2)
+        def click(x,y):
+            self.p1.clicked(x,y,self.player)
+            self.p2.clicked(x,y,self.player)
+        self.cells.set_func(click)
         self.isPassed=False
         for i,j,k in ((3,3,2),(4,3,1),(5,3,2),(3,4,1),(5,4,1),(4,5,2)):
             self.cells.set_cell_value(i,j,k)
+        threading.Thread(target=self.playing).start()
 
     def isPass(self):
         '''
@@ -55,9 +63,7 @@ class OthelloController:
         '''
         終了時に呼ばれるメソッドで主に勝敗表示などに使う
         '''
-        print(self.winner(self.cells.getBoard()))
-        exit(0)
-        pass
+        return self.winner(self.cells.getBoard())
 
     def pass_(self):
         '''
@@ -70,15 +76,15 @@ class OthelloController:
             self.end()
 
 
-    def clicked(self,x,y):
+    def playing(self):
         '''
-        クリックされたときに呼び出されるメソッド
-        :param x: x位置
-        :param y: y位置
-        :return:
+        常時呼び出されるメソッド
         '''
+        if self.player==1:
+            x,y=self.p1.getValue(self.cells.getBoard(),self.player)
+        else:
+            x,y=self.p2.getValue(self.cells.getBoard(),self.player)
         c=self.putable(self.cells.getBoard(),x,y,self.player)
-
         if c is None:
             pass
         else:
@@ -87,3 +93,6 @@ class OthelloController:
             self.player=self.turn(self.player,self.turn_number)
             if self.isPass():
                 self.pass_()
+        self.p1.reset()
+        self.p2.reset()
+        self.playing()
