@@ -1,7 +1,6 @@
 from CellBase import Cells
 from Funcs import BeforeFuncs as bef
 from Funcs import PutableFuncs as put
-from Funcs import TurnFuncs as turn
 from Funcs import WinnerFunc as win
 import numpy as np
 from Player import Player
