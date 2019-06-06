@@ -31,14 +31,6 @@ class PutableFuncs:
         return None
 
 
-class TurnFuncs:
-    '''
-    次の人のターンを返す関数
-    '''
-    @staticmethod
-    def nextPlayer(value,turnnum):
-        return value%2+1
-
 class WinnerFunc:
     '''
     勝者を確定する関数

@@ -25,6 +25,3 @@ class Mask:
     ランダムに穴をあけるマスク
     '''
     random=np.where(np.random.rand(9,9)<=0.92,1,0)
-
-    def __init__(self):
-        pass

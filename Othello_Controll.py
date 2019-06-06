@@ -8,7 +8,7 @@ from Player import Player
 import sys
 import threading
 class OthelloController:
-    def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.NotPlaced,turnFunc=turn.nextPlayer,winnerFunc=win.more):
+    def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.NotPlaced,winnerFunc=win.more,endfunc=None):
         '''
         初期化処理
         :param canvas:Tk.Canvasオブジェクト
@@ -23,9 +23,9 @@ class OthelloController:
         self.mask=mask-1
         self.before=beforeFunc
         self.putable=putableFunc
-        self.turn=turnFunc
         self.winner=winnerFunc
         self.create()
+        self.endfunc=endfunc
 
     def create(self):
         '''
@@ -63,7 +63,9 @@ class OthelloController:
         '''
         終了時に呼ばれるメソッドで主に勝敗表示などに使う
         '''
-        exit(0)
+        if self.endfunc is not None:
+            self.endfunc()
+        exit()
 
     def pass_(self):
         '''
@@ -90,7 +92,7 @@ class OthelloController:
         else:
             self.cells.apply_mask(c)
             self.turn_number+=1
-            self.player=self.turn(self.player,self.turn_number)
+            self.player=self.player%2+1
             if self.isPass():
                 self.pass_()
         self.p1.reset()
