@@ -4,7 +4,7 @@ from Funcs import PutableFuncs as put
 from Funcs import WinnerFunc as win
 import numpy as np
 from Player import Player
-import sys
+from MonteCarlo import NPC
 import threading
 class OthelloController:
     def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.NotPlaced,winnerFunc=win.more,endfunc=None):
@@ -35,8 +35,8 @@ class OthelloController:
         self.cells=self.before(self.cells)
         self.turn_number=0
         self.player=1
-        self.p1 = Player(1)
-        self.p2 = Player(2)
+        self.p1 = Player(1,self.putable,self.winner)
+        self.p2 = NPC(2,self.putable,self.winner)
         def click(x,y):
             self.p1.clicked(x,y,self.player)
             self.p2.clicked(x,y,self.player)
@@ -82,9 +82,9 @@ class OthelloController:
         常時呼び出されるメソッド
         '''
         if self.player==1:
-            x,y=self.p1.getValue(self.cells.getBoard(),self.player)
+            x,y=self.p1.getValue(self.cells.getBoard())
         else:
-            x,y=self.p2.getValue(self.cells.getBoard(),self.player)
+            x,y=self.p2.getValue(self.cells.getBoard())
         c=self.putable(self.cells.getBoard(),x,y,self.player)
         if c is None:
             pass

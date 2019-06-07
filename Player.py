@@ -1,6 +1,6 @@
 import time
 class Player:
-    def __init__(self,value):
+    def __init__(self,value,*args):
         self.value=value
         self.x,self.y=None,None
     def clicked(self,x,y,value):
