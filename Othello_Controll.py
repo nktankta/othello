@@ -84,9 +84,9 @@ class OthelloController:
         常時呼び出されるメソッド
         '''
         if self.player==1:
-            x,y=self.p1.getValue(self.cells.getBoard())
+            x,y=self.p1.getValue(self.cells.getBoard(),self.turn_number)
         else:
-            x,y=self.p2.getValue(self.cells.getBoard())
+            x,y=self.p2.getValue(self.cells.getBoard(),self.turn_number)
         c=self.putable(self.cells.getBoard(),x,y,self.player)
         if c is None:
             pass
