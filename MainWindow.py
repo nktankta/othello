@@ -7,7 +7,7 @@ def main():
     root = tk.Tk()
     root.geometry(str(w)+"x"+str(h))
     canvas = tk.Canvas(root, width=w, height=h)
-    c=oc(canvas,Mask.hexagon,endfunc=lambda :root.destroy())
+    c=oc(canvas,Mask.hexagon*Mask.random,endfunc=lambda :root.quit())
     canvas.pack()
     root.mainloop()
 
