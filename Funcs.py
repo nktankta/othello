@@ -1,12 +1,11 @@
 import numpy as np
-from BeforeCalculation import get_around
-
+from BeforeCalcv2 import get_around
 def update_board(board,x,y,player):
     dic=get_around(x,y)
     bef=board
     aft=board
     for i in dic.values():
-        aft=isPutable(i,bef,player)
+        aft=isPutablev2(i,bef,player)
         if aft is  not None:
             bef=aft
     return bef
@@ -27,6 +26,24 @@ def isPutable(ls,board,player):
             if board[y][x]==player:
                 return ret
             break
+    return None
+def isPutablev2(ls,board,player):
+    include_otherPlayer=False
+    if len(ls[0])==0:
+        return None
+    arr=board[ls]
+    for i,a in enumerate(arr):
+        if a==player%2+1:
+            include_otherPlayer=True
+            arr[i]=player
+            continue
+        if not include_otherPlayer:
+            return None
+        else:
+            if arr[i]==player:
+                ret=np.copy(board)
+                ret[ls]=arr
+                return ret
     return None
 class BeforeFuncs():
     '''
