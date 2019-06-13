@@ -44,7 +44,7 @@ def isPutablev2(ls,board,player):
                 ret=np.copy(board)
                 ret[ls]=arr
                 return ret
-    return None
+            return None
 class BeforeFuncs():
     '''
     事前に行いたい処理の関数
@@ -61,12 +61,12 @@ class PutableFuncs:
 
     @staticmethod
     def simple_putable(cells,x,y,turn):
-        if cells[y][x]!=0:
+        if cells[y,x]!=0:
             return None
         ret=update_board(cells,x,y,turn)
         if np.allclose(ret,cells):
             return None
-        ret[y][x]=turn
+        ret[y,x]=turn
         return ret
 
 

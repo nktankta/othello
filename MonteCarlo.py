@@ -41,7 +41,7 @@ class Node:
     def random_putable(self,board,player):
         for i in random.sample(list(range(board.shape[0])),board.shape[0]):
             for j in random.sample(list(range(board.shape[1])),board.shape[1]):
-                if board[i][j] != 0:
+                if board[i,j] != 0:
                     continue
                 ret = self.putable(board, j, i, player)
                 if ret is not None:
@@ -86,6 +86,8 @@ class Root(Node):
         :return: 置く場所
         '''
         self.create_children(isPassFirstPlayout=True)
+        if len(self.children)==1:
+            return self.children[0].args[0]
         log=[]
         with futures.ProcessPoolExecutor() as executor:
             for ch in self.children:
@@ -211,6 +213,6 @@ class NPC:
         :return: 設置場所
         '''
         self.root=Root(board,self.player,self.put,self.win)
-        return self.root.old_tree_search(100+turns*10)
+        return self.root.old_tree_search(50+turns*10)
     def clicked(self,*args):
         pass
