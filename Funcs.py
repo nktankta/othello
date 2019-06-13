@@ -1,17 +1,8 @@
 import numpy as np
-def get_around(board,x,y):
-    dic={}
-    up=y + y % 2
-    down=y - 1 + y % 2
-    dic["RU"] = get_line_cells(board,x,y,"U","R")
-    dic["RD"] = get_line_cells(board,x,y,"D","R")
-    dic["LU"] = get_line_cells(board,x,y,"U","L")
-    dic["LD"] = get_line_cells(board,x,y,"D","L")
-    dic["U"] = get_line_cells(board,x,y,"U",None)
-    dic["D"] = get_line_cells(board,x,y,"D",None)
-    return dic
+from BeforeCalculation import get_around
+
 def update_board(board,x,y,player):
-    dic=get_around(board,x,y)
+    dic=get_around(x,y)
     bef=board
     aft=board
     for i in dic.values():
@@ -19,33 +10,7 @@ def update_board(board,x,y,player):
         if aft is  not None:
             bef=aft
     return bef
-def get_line_cells(board,x,y,vertical,holizon):
-    ls=[]
-    bx=x
-    by=y
-    while True:
-        ax,ay=calc_cell_point(bx,by,vertical,holizon)
-        if 0<=ay<board.shape[0] and 0<=ax<board.shape[1]:
-            ls.append((ax,ay))
-        else:
-            break
-        bx,by=ax,ay
-    return ls
-def calc_cell_point(x,y,vertical,holizon):
-    if holizon==None:
-        if vertical=="U":
-            return (x,y-1)
-        else:
-            return (x,y+1)
-    if holizon=="R":
-        rx=x+1
-    else:
-        rx=x-1
-    if vertical=="U":
-        ry=y - 1 + (x % 2)
-    else:
-        ry= y + (x%2)
-    return (rx,ry)
+
 def isPutable(ls,board,player):
     include_otherPlayer=False
     ret=np.copy(board)
@@ -76,6 +41,7 @@ class PutableFuncs:
     '''
     設置可能かどうかを返す関数
     '''
+
     @staticmethod
     def simple_putable(cells,x,y,turn):
         if cells[y][x]!=0:

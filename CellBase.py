@@ -192,7 +192,6 @@ class Cells():
         :param y: 選択されたCellのy位置
         '''
         self.func(x,y)
-        print(self.getBoard())
 
     def create_boad(self,x,y):
         '''

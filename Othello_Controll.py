@@ -36,7 +36,7 @@ class OthelloController:
         self.turn_number=0
         self.player=1
         self.p1 = NPC(1,self.putable,self.winner)
-        self.p2 = Player(2,self.putable,self.winner)
+        self.p2 = NPC(2,self.putable,self.winner)
         def click(x,y):
             self.p1.clicked(x,y,self.player)
             self.p2.clicked(x,y,self.player)
@@ -95,6 +95,7 @@ class OthelloController:
             self.turn_number+=1
             self.player=self.player%2+1
             if self.isPass():
+                print("passed")
                 self.pass_()
         self.p1.reset()
         self.p2.reset()

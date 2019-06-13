@@ -38,6 +38,15 @@ class Node:
                 if ret is not None:
                     ls.append(((j, i), ret))
         return ls
+    def random_putable(self,board,player):
+        for i in random.sample(list(range(board.shape[0])),board.shape[0]):
+            for j in random.sample(list(range(board.shape[1])),board.shape[1]):
+                if board[i][j] != 0:
+                    continue
+                ret = self.putable(board, j, i, player)
+                if ret is not None:
+                    return((j, i), ret)
+        return None
 
     def get_values(self):
         '''
@@ -120,11 +129,11 @@ class Child(Node):
         :return: 勝率
         '''
         for i in range(num):
-            self.playout()
+            self.playout(isRandom=True)
         print(self.args[0],":",(self.n-self.wins)/self.n,"(",self.n-self.wins,"/",self.n,")")
         return (self.n-self.wins)/self.n
 
-    def playout(self):
+    def playout(self,isRandom=False):
         '''
         プレイアウトを行う関数
         :return: 勝敗
@@ -134,16 +143,28 @@ class Child(Node):
         player=self.player
         played=[]
         while True:
-            tup=self.get_Putable(board,player)
-            try:
-                rand=random.choice(tup)
-                isPassed=False
-            except:
-                if isPassed:
-                    break
+            if not isRandom:
+                tup=self.get_Putable(board,player)
+                try:
+                    rand=random.choice(tup)
+                    isPassed=False
+                except:
+                    if isPassed:
+                        break
+                    else:
+                        isPassed=True
+                        continue
+            else:
+                tup=self.random_putable(board,player)
+                if tup is not None:
+                    rand=tup
+                    isPassed=False
                 else:
-                    isPassed=True
-                    continue
+                    if isPassed:
+                        break
+                    else:
+                        isPassed=True
+                        continue
             board=rand[1]
             played.append(rand[0])
             player=player%2+1
