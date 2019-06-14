@@ -35,7 +35,7 @@ class OthelloController:
         self.cells=self.before(self.cells)
         self.turn_number=0
         self.player=1
-        self.p1 = NPC(1,self.putable,self.winner)
+        self.p1 = Player(1,self.putable,self.winner)
         self.p2 = NPC(2,self.putable,self.winner)
         def click(x,y):
             self.p1.clicked(x,y,self.player)
