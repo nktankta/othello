@@ -18,7 +18,7 @@ class CellBase:
         l = 0.866
         return x, y, x + length, y, x + 1.5 * length, y +l * length, x + length, y + 2 * l * length, x, y + 2 * l * length, x - 0.5 * length, y + l * length
 
-    def __init__(self,canvas,px,py,length,value=0):
+    def __init__(self,canvas,px,py,length,value=0,board="green"):
         '''
         初期化処理で六角形も作成する
         :param canvas:TK.Canvasオブジェクト
@@ -33,7 +33,7 @@ class CellBase:
         self.cid=-1
         self.len=length
         self.clen=length*0.7
-        self.create_hexagon()
+        self.create_hexagon(fill=board)
 
     def circle(self,color):
         '''
@@ -89,15 +89,15 @@ class CellBase:
         else:
             pass
 
-    def set_value(self,v):
+    def set_value(self,v,color1="white",color2="black"):
         '''
         指定した値をvalueに代入し再描画するメソッド
         :param v: valueに入れたい値
         '''
         self.value = v
-        self.update()
+        self.update(color1=color1,color2=color2)
 
-    def update(self):
+    def update(self,color1,color2):
         '''
         valueに基づいて再描画するメソッド
         '''
@@ -106,9 +106,9 @@ class CellBase:
         if self.value==0:
             self.delete_circle()
         elif self.value==1:
-            self.circle("white")
+            self.circle(color1)
         elif self.value==2:
-            self.circle("black")
+            self.circle(color2)
         elif self.value==-1:
             self.delete()
         else:
@@ -129,6 +129,7 @@ class Cells():
         self.length=length
         self.cells=[]
         self.func=lambda x,y:None
+        self.setColor()
 
     def set_func(self,func):
         '''
@@ -157,7 +158,10 @@ class Cells():
         :return: x,y位置のCell.value
         '''
         return self.cells[x][y].value
-
+    def setColor(self,board="green",cell1="white",cell2="black"):
+        self.board_color=board
+        self.cell1_color=cell1
+        self.cell2_color=cell2
     def getBoard(self):
         '''
         ボード全体の状態を返すメソッド
@@ -208,9 +212,9 @@ class Cells():
             cs=[]
             for j in range(y+1):
                 if i%2==0:
-                    cell=CellBase(self.canvas,1.5*i*self.length+0.5*self.length,j*self.length*1.732,self.length)
+                    cell=CellBase(self.canvas,1.5*i*self.length+0.5*self.length,j*self.length*1.732,self.length,board=self.board_color)
                 else:
-                    cell = CellBase(self.canvas, 1.5 * i * self.length + 0.5*self.length, j * self.length*1.732+0.866*self.length, self.length)
+                    cell = CellBase(self.canvas, 1.5 * i * self.length + 0.5*self.length, j * self.length*1.732+0.866*self.length, self.length,board=self.board_color)
                 cs.append(cell)
 
                 self.canvas.tag_bind(cell.id,"<1>",l(i,j))
@@ -227,7 +231,7 @@ class Cells():
         :param y: y位置
         :param value: 設定したい値
         '''
-        self.cells[x][y].set_value(value)
+        self.cells[x][y].set_value(value,color1=self.cell1_color,color2=self.cell2_color)
 
     def apply_mask(self,mask):
         '''

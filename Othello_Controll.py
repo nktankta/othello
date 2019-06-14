@@ -7,7 +7,7 @@ from Player import Player
 from MonteCarlo import NPC
 import threading
 class OthelloController:
-    def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.simple_putable,winnerFunc=win.more,endfunc=None):
+    def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.simple_putable,winnerFunc=win.more,color=None,endfunc=None):
         '''
         初期化処理
         :param canvas:Tk.Canvasオブジェクト
