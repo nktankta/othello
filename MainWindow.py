@@ -1,14 +1,18 @@
 import tkinter as tk
-from Othello_Controll import OthelloController as oc
-from Mask import Mask
+import GameWindow as gw
+import SettingWindow as sw
+
 def main():
     h=475
     w=425
     root = tk.Tk()
     root.geometry(str(w)+"x"+str(h))
-    canvas = tk.Canvas(root, width=w, height=h)
-    c=oc(canvas,Mask.hexagon*Mask.random,endfunc=lambda :root.quit())
-    canvas.pack()
+    def switchWindow(e):
+        print(e)
+        fr=gw.GameWindow(root,w=w,h=h,player=e["player"],color=e["color"])
+        fr.pack()
+    fr=sw.SettingFrame(root,endfunc=switchWindow)
+    fr.pack()
     root.mainloop()
 
 if __name__=="__main__":

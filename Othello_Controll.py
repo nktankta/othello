@@ -7,7 +7,7 @@ from Player import Player
 from MonteCarlo import NPC
 import threading
 class OthelloController:
-    def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.simple_putable,winnerFunc=win.more,color=None,endfunc=None):
+    def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.simple_putable,winnerFunc=win.more,player=None,color=None,endfunc=None):
         '''
         初期化処理
         :param canvas:Tk.Canvasオブジェクト
@@ -23,9 +23,23 @@ class OthelloController:
         self.before=beforeFunc
         self.putable=putableFunc
         self.winner=winnerFunc
-        self.create()
         self.endfunc=endfunc
+        if color is not None:
+            self.cells.setColor(color[0],color[1],color[2])
+        if player is None:
+            self.createPlayer(["Player","Player"])
+        else:
+            self.createPlayer(player)
+        self.create()
 
+    def createPlayer(self,ls):
+        self.p1=self.getPlayer(ls[0],1)
+        self.p2=self.getPlayer(ls[1],2)
+    def getPlayer(self,s,value):
+        if s=="Player":
+            return Player(value,self.putable,self.winner)
+        else:
+            return NPC(value,self.putable,self.winner)
     def create(self):
         '''
         盤面を作成するメソッド
@@ -35,8 +49,6 @@ class OthelloController:
         self.cells=self.before(self.cells)
         self.turn_number=0
         self.player=1
-        self.p1 = Player(1,self.putable,self.winner)
-        self.p2 = NPC(2,self.putable,self.winner)
         def click(x,y):
             self.p1.clicked(x,y,self.player)
             self.p2.clicked(x,y,self.player)

@@ -159,9 +159,9 @@ class Cells():
         '''
         return self.cells[x][y].value
     def setColor(self,board="green",cell1="white",cell2="black"):
-        self.board_color=board
-        self.cell1_color=cell1
-        self.cell2_color=cell2
+        self.board_color=board if board!="default" else "green"
+        self.cell1_color=cell1 if cell1!="default" else "white"
+        self.cell2_color=cell2 if cell2!="default" else "black"
     def getBoard(self):
         '''
         ボード全体の状態を返すメソッド
