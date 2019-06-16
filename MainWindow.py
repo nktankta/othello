@@ -6,11 +6,12 @@ def main():
     h=475
     w=425
     root = tk.Tk()
+    root.title(u"設定")
     root.geometry(str(w)+"x"+str(h))
-    def switchWindow(e):
-        print(e)
+    def switchWindow(e):#実際の画面遷移、もしこれ以上画面作成するなら別でメソッド、クラス化
         fr=gw.GameWindow(root,w=w,h=h,player=e["player"],color=e["color"])
         fr.pack()
+        root.title(u"Othello(仮)")
     fr=sw.SettingFrame(root,endfunc=switchWindow)
     fr.pack()
     root.mainloop()

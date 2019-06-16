@@ -213,6 +213,6 @@ class NPC:
         :return: 設置場所
         '''
         self.root=Root(board,self.player,self.put,self.win)
-        return self.root.old_tree_search(min(30+turns*turns,500))
+        return self.root.old_tree_search(min(30+turns*turns,300))
     def clicked(self,*args):
         pass

@@ -33,10 +33,14 @@ class OthelloController:
         self.create()
 
     def createPlayer(self,ls):
+        '''
+        プレイヤーの作成
+        :param ls: len=2で、PlayerまたはNPC
+        '''
         self.p1=self.getPlayer(ls[0],1)
         self.p2=self.getPlayer(ls[1],2)
     def getPlayer(self,s,value):
-        if s=="Player":
+        if s=="Player" or s=="default":
             return Player(value,self.putable,self.winner)
         else:
             return NPC(value,self.putable,self.winner)

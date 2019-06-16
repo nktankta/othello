@@ -159,6 +159,13 @@ class Cells():
         '''
         return self.cells[x][y].value
     def setColor(self,board="green",cell1="white",cell2="black"):
+        '''
+        色の変更を行うメソッド（初めに呼ばないとおかしくなる）
+        :param board: 盤面の色
+        :param cell1: 先攻の色
+        :param cell2: 後攻の色
+        :return:
+        '''
         self.board_color=board if board!="default" else "green"
         self.cell1_color=cell1 if cell1!="default" else "white"
         self.cell2_color=cell2 if cell2!="default" else "black"

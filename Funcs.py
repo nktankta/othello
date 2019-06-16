@@ -1,33 +1,31 @@
 import numpy as np
-from BeforeCalcv2 import get_around
+from BeforeCalc import get_around
 def update_board(board,x,y,player):
+    '''
+    ボードの更新を行う（設置処理）
+    :param board: ボードの更新前状態
+    :param x: x位置
+    :param y: y位置
+    :param player: プレーヤー番号
+    :return: 更新後
+    '''
     dic=get_around(x,y)
     bef=board
     aft=board
     for i in dic.values():
-        aft=isPutablev2(i,bef,player)
+        aft=isPutable(i,bef,player)
         if aft is  not None:
             bef=aft
     return bef
 
 def isPutable(ls,board,player):
-    include_otherPlayer=False
-    ret=np.copy(board)
-    if len(ls)==0:
-        return None
-    for x,y in ls:
-        if board[y][x]==player%2+1:
-            include_otherPlayer=True
-            ret[y][x]=player
-            continue
-        if not include_otherPlayer:
-            return None
-        else:
-            if board[y][x]==player:
-                return ret
-            break
-    return None
-def isPutablev2(ls,board,player):
+    '''
+    実際におけるかどうかを判断するメソッド
+    :param ls:対称の配列を抜き出すリスト
+    :param board: ボードの状態
+    :param player: プレーヤー番号
+    :return: 設置できれば盤面、できなければNone
+    '''
     include_otherPlayer=False
     if len(ls[0])==0:
         return None
@@ -60,13 +58,21 @@ class PutableFuncs:
     '''
 
     @staticmethod
-    def simple_putable(cells,x,y,turn):
+    def simple_putable(cells,x,y,player):
+        '''
+        通常のオセロと同じ
+        :param cells: 現在のセル
+        :param x: ｘ位置
+        :param y: ｙ位置
+        :param player: プレーヤー番号
+        :return: 設置できればボードの状態、できなければNone
+        '''
         if cells[y,x]!=0:
             return None
-        ret=update_board(cells,x,y,turn)
+        ret=update_board(cells,x,y,player)
         if np.allclose(ret,cells):
             return None
-        ret[y,x]=turn
+        ret[y,x]=player
         return ret
 
 
