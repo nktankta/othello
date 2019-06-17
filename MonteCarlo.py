@@ -216,3 +216,5 @@ class NPC:
         return self.root.old_tree_search(min(30+turns*turns,300))
     def clicked(self,*args):
         pass
+    def resetTime(self):
+        pass

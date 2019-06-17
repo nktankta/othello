@@ -3,6 +3,7 @@ from Funcs import BeforeFuncs as bef
 from Funcs import PutableFuncs as put
 from Funcs import WinnerFunc as win
 import numpy as np
+import random
 from Player import Player
 from MonteCarlo import NPC
 import threading
@@ -123,10 +124,14 @@ class OthelloController:
             x,y=self.p1.getValue(self.cells.getBoard(),self.turn_number)
         else:
             x,y=self.p2.getValue(self.cells.getBoard(),self.turn_number)
+        if x is None:
+            x,y=random.choice(self.get_Putable())
         c=self.putable(self.cells.getBoard(),x,y,self.player)
         if c is None:
             pass
         else:
+            self.p1.resetTime()
+            self.p2.resetTime()
             self.cells.apply_mask(c)
             self.turn_number+=1
             self.player=self.player%2+1

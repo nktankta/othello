@@ -1,18 +1,18 @@
 import tkinter as tk
 from tkinter import ttk
-
+from PIL import Image,ImageTk
 class Selector(ttk.Combobox):
     '''
     コンポボックスで、デフォルト値と値変更時に変数変更を行う
     '''
-    def __init__(self, master, ls,var):
+    def __init__(self, master, ls,var,bg="white"):
         '''
         初期化処理
         :param master:上位のtk.Frame
         :param ls: 表示したい内容
         :param var: tk.StringVar型で自動的に更新される
         '''
-        super().__init__(master=master, values=ls)
+        super().__init__(master=master, values=ls,width=7,font=("",10))
         self.set(ls[0])
         self.master = master
         self.bind('<<ComboboxSelected>>', self.show_selected)
@@ -26,41 +26,42 @@ class Selector(ttk.Combobox):
         if self.var is not None:
             self.var.set(self.get())
 
-class SelectorWithText(tk.Frame):
-    def __init__(self,master,text,ls,var):
-        '''
-        セレクターとラベルを一緒にしたもの
-        :param master: 上位tk.Frame
-        :param text: 表示したいテキスト
-        :param ls: 表示したいリスト
-        :param var: 更新する変数
-        '''
-        super().__init__(master=master)
-        self.label=tk.Label(self,text=text)
-        self.selector=Selector(self,ls,var)
-        self.label.grid(column=0,row=0)
-        self.selector.grid(column=1,row=0)
+class CharacterSetting(tk.Frame):
+    def __init__(self,master,text="None",var=None,fill="white",bg="white"):
+        super().__init__(master=master,bg=bg)
+        tk.Label(self,text=text,font=("",20),bg=bg).pack(side="left",padx=10)
+        Selector(self,["Player","NPC"],var=var,bg=bg).pack(side="left",padx=10)
+        self.img=Image.open("./icon/1.png")
+        self.img.thumbnail((50,50))
+        self.img1=ImageTk.PhotoImage(self.img)
+        cv=tk.Canvas(master=self,width=100,height=50,bg=bg)
+        cv.config(highlightbackground=bg)
+        cv.create_image(0,0,image=self.img1,anchor=tk.NW)
+        cv.create_oval(55,5,95,45,fill=fill)
+        cv.pack(padx=10)
+class Title(tk.Frame):
+    def __init__(self,master,text,font=("",10),width=400,height=100,bg="white"):
+        super().__init__(master)
+        delta=3
+        cv=tk.Canvas(self,width=width,height=height,bg=bg)
+        cv.create_text(width//2+delta
+                       ,height//2+delta
+                       ,text=text
+                       ,fill="black"
+                       ,font=font
+                       ,justify="center")
+        cv.create_text(width // 2
+                       , height // 2
+                       , text=text
+                       , fill="white"
+                       , font=font
+                       , justify="center")
+        cv.config(highlightbackground=bg)
+        cv.pack()
 
-class ColorSelector(SelectorWithText):
-    def __init__(self, frame,text,var=None):
-        '''
-        色の選択を可能にしたもの
-        :param frame: 上位Frame
-        :param text: 表示したい文字
-        :param var: 変更したい変数
-        '''
-        ls = ["default","cyan", "black", "white", "blue", "red", "green","pink","gold","purple","sky blue","light grey"]
-        super().__init__(master=frame, ls=ls,text=text,var=var)
-class CharacterSelector(SelectorWithText):
-    def __init__(self,frame,text,var=None):
-        '''
-        プレーヤーかNPCかの選択を可能にしたもの
-        :param frame: 上位Frame
-        :param text: 表示したい文字
-        :param var: 変更したい変数
-        '''
-        ls=["Player","NPC"]
-        super().__init__(master=frame, ls=ls,text=text,var=var)
+
+
+
 class SettingFrame(tk.Frame):
     def __init__(self,master,endfunc=lambda e:print(None)):
         '''
@@ -68,23 +69,20 @@ class SettingFrame(tk.Frame):
         :param master:上位Frame
         :param endfunc: 決定時に呼ばれる関数
         '''
-        super().__init__(master=master)
+        bg="lawn green"
+        super().__init__(master=master,bg=bg)
         self.endfunc=endfunc
         self.vars=[]
-        [self.vars.append(tk.StringVar(master=self,value="default")) for x in range(5) ]
-        ch1 = CharacterSelector(self, "Character1",var=self.vars[0])
-        ch2 = CharacterSelector(self, "Character2",var=self.vars[1])
-        ch1.grid(column=0, row=0)
-        ch2.grid(column=1, row=0)
-        p1 = ColorSelector(self, "Player1",var=self.vars[2])
-        p1.grid(column=0, row=1)
-        p2 = ColorSelector(self, "Player2",var=self.vars[3])
-        p2.grid(column=1, row=1)
-        board = ColorSelector(self, "Board Color",var=self.vars[4])
-        board.grid(column=0, row=2)
-        bt=tk.Button(self,text="OK")
+        pad=10
+        title=Title(self,text="タイトル（仮）",font=(u'ＭＳ ゴシック',40),bg=bg)
+        title.pack(pady=pad)
+        [self.vars.append(tk.StringVar(master=self,value="default")) for x in range(2) ]
+        CharacterSetting(self,u"先攻",self.vars[0],fill="white",bg=bg).pack(pady=pad)
+        CharacterSetting(self,u"後攻", self.vars[1],fill="black",bg=bg).pack(pady=pad)
+
+        bt=tk.Button(self,text="スタート",fg="yellow",font=("",20))
         bt.bind("<Button-1>",self.endCall)
-        bt.grid(column=0,row=3)
+        bt.pack(pady=pad)
     def endCall(self,event):
         '''
         終了時に呼ばれる関数
@@ -100,7 +98,6 @@ class SettingFrame(tk.Frame):
         ls= [x.get() for x in self.vars]
         dic={}
         dic["player"]=[ls[0],ls[1]]
-        dic["color"]=[ls[4],ls[2],ls[3]]
         return dic
 
 def main():

@@ -117,7 +117,7 @@ class CellBase:
         elif self.value==-1:
             self.delete()
         elif self.value==4:
-            self.create_hexagon("yellow")
+            self.create_hexagon("lime green")
         else:
             pass
 
