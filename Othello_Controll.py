@@ -60,6 +60,7 @@ class OthelloController:
         self.isPassed=False
         for i,j,k in ((3,3,2),(4,3,1),(4,4,2),(5,3,2),(3,4,1),(5,4,1),(4,5,2)):
             self.cells.set_cell_value(i,j,k)
+        self.printAvailable()
         threading.Thread(target=self.playing).start()
 
     def isPass(self):
@@ -93,8 +94,27 @@ class OthelloController:
         self.player=self.player%2+1
         if self.isPass():
             self.end()
-
-
+    def get_Putable(self):
+        '''
+        置ける場所全て返す関数
+        :return: 設置できる場所
+        '''
+        board=self.cells.getBoard()
+        ls = []
+        for i in range(board.shape[0]):
+            for j in range(board.shape[1]):
+                if board[i][j] != 0:
+                    continue
+                ret = self.putable(board, j, i, self.player)
+                if ret is not None:
+                    ls.append((j, i))
+        return ls
+    def printAvailable(self):
+        ls=self.get_Putable()
+        for x,y in ls:
+            self.cells.set_cell_value(x,y,4)
+    def resetAvailable(self):
+        self.cells.apply_mask(self.cells.getBoard())
     def playing(self):
         '''
         常時呼び出されるメソッド
@@ -113,6 +133,8 @@ class OthelloController:
             if self.isPass():
                 print("passed")
                 self.pass_()
+            self.resetAvailable()
+            self.printAvailable()
         self.p1.reset()
         self.p2.reset()
         self.playing()

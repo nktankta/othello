@@ -29,6 +29,7 @@ class CellBase:
         self.canvas=canvas
         self.px=px
         self.py=py
+        self.id=-1
         self.value=value
         self.cid=-1
         self.len=length
@@ -52,8 +53,10 @@ class CellBase:
         :param outline: 外枠の色
         :return:
         '''
-        self.id=self.canvas.create_polygon(CellBase.get_hex_top(self.px,self.py,self.len),fill=fill,outline=outline)
-
+        if self.id==-1:
+            self.id=self.canvas.create_polygon(CellBase.get_hex_top(self.px,self.py,self.len),fill=fill,outline=outline)
+        else:
+            self.canvas.itemconfigure(self.id, fill=fill)
     def create_circle(self,fill="white"):
         '''
         円を作成する
@@ -97,11 +100,13 @@ class CellBase:
         self.value = v
         self.update(color1=color1,color2=color2)
 
+    def get_value(self):
+        return self.value if self.value!=4 else 0
     def update(self,color1,color2):
         '''
         valueに基づいて再描画するメソッド
         '''
-        if self.id==-1 and self.value!=-1:
+        if self.value!=-1:
             self.create_hexagon()
         if self.value==0:
             self.delete_circle()
@@ -111,6 +116,8 @@ class CellBase:
             self.circle(color2)
         elif self.value==-1:
             self.delete()
+        elif self.value==4:
+            self.create_hexagon("yellow")
         else:
             pass
 
@@ -157,7 +164,7 @@ class Cells():
         :param y: y位置
         :return: x,y位置のCell.value
         '''
-        return self.cells[x][y].value
+        return self.cells[x][y].get_value()
     def setColor(self,board="green",cell1="white",cell2="black"):
         '''
         色の変更を行うメソッド（初めに呼ばないとおかしくなる）
@@ -234,6 +241,7 @@ class Cells():
     def set_cell_value(self,x,y,value):
         '''
         指定した位置のCellをvalueに変更する
+
         :param x: x位置
         :param y: y位置
         :param value: 設定したい値
