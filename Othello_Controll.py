@@ -8,7 +8,7 @@ from Player import Player
 from MonteCarlo import NPC
 import threading
 class OthelloController:
-    def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.simple_putable,winnerFunc=win.more,player=None,color=None,endfunc=None):
+    def __init__(self,canvas,mask,beforeFunc=bef.passing,putableFunc=put.simple_putable,winnerFunc=win.more,player=None,color=None,endfunc=None,updatefunc=lambda a:None ):
         '''
         初期化処理
         :param canvas:Tk.Canvasオブジェクト
@@ -25,6 +25,7 @@ class OthelloController:
         self.putable=putableFunc
         self.winner=winnerFunc
         self.endfunc=endfunc
+        self.updatefunc=updatefunc
         if color is not None:
             self.cells.setColor(color[0],color[1],color[2])
         if player is None:
@@ -62,6 +63,7 @@ class OthelloController:
         for i,j,k in ((3,3,2),(4,3,1),(4,4,2),(5,3,2),(3,4,1),(5,4,1),(4,5,2)):
             self.cells.set_cell_value(i,j,k)
         self.printAvailable()
+
         threading.Thread(target=self.playing).start()
 
     def isPass(self):
@@ -110,6 +112,11 @@ class OthelloController:
                 if ret is not None:
                     ls.append((j, i))
         return ls
+    def getCellNums(self):
+        bd=self.cells.getBoard()
+        n1=np.sum(np.where(bd==1,1,0))
+        n2=np.sum(np.where(bd==2,1,0))
+        return (n1,n2)
     def printAvailable(self):
         ls=self.get_Putable()
         for x,y in ls:
@@ -120,6 +127,7 @@ class OthelloController:
         '''
         常時呼び出されるメソッド
         '''
+        self.updatefunc(self.player, self.getCellNums())
         if self.player==1:
             x,y=self.p1.getValue(self.cells.getBoard(),self.turn_number)
         else:
@@ -142,4 +150,5 @@ class OthelloController:
             self.printAvailable()
         self.p1.reset()
         self.p2.reset()
+
         self.playing()

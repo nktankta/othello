@@ -226,9 +226,9 @@ class Cells():
             cs=[]
             for j in range(y+1):
                 if i%2==0:
-                    cell=CellBase(self.canvas,1.5*i*self.length+0.5*self.length,j*self.length*1.732,self.length,board=self.board_color)
+                    cell=CellBase(self.canvas,1.5*i*self.length+0.5*self.length,j*self.length*1.732+3,self.length,board=self.board_color)
                 else:
-                    cell = CellBase(self.canvas, 1.5 * i * self.length + 0.5*self.length, j * self.length*1.732+0.866*self.length, self.length,board=self.board_color)
+                    cell = CellBase(self.canvas, 1.5 * i * self.length + 0.5*self.length, j * self.length*1.732+0.866*self.length+3, self.length,board=self.board_color)
                 cs.append(cell)
 
                 self.canvas.tag_bind(cell.id,"<1>",l(i,j))

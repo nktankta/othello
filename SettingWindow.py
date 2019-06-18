@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image,ImageTk
+import glob
+import random
+from IconController import ImageCanvas
 class Selector(ttk.Combobox):
     '''
     コンポボックスで、デフォルト値と値変更時に変数変更を行う
@@ -27,18 +30,16 @@ class Selector(ttk.Combobox):
             self.var.set(self.get())
 
 class CharacterSetting(tk.Frame):
-    def __init__(self,master,text="None",var=None,fill="white",bg="white"):
+    def __init__(self,master,text="None",var=None,fill="white",bg="white",image="./icon/1.png"):
         super().__init__(master=master,bg=bg)
         tk.Label(self,text=text,font=("",20),bg=bg).pack(side="left",padx=10)
         Selector(self,["Player","NPC"],var=var,bg=bg).pack(side="left",padx=10)
-        self.img=Image.open("./icon/1.png")
-        self.img.thumbnail((50,50))
-        self.img1=ImageTk.PhotoImage(self.img)
-        cv=tk.Canvas(master=self,width=100,height=50,bg=bg)
+        ic=ImageCanvas(self,width=50,height=50,bg=bg,image=image)
+        ic.pack(side="left",padx=10)
+        cv=tk.Canvas(master=self,width=50,height=50,bg=bg)
         cv.config(highlightbackground=bg)
-        cv.create_image(0,0,image=self.img1,anchor=tk.NW)
-        cv.create_oval(55,5,95,45,fill=fill)
-        cv.pack(padx=10)
+        cv.create_oval(5,5,45,45,fill=fill)
+        cv.pack(side="left",padx=10)
 class Title(tk.Frame):
     def __init__(self,master,text,font=("",10),width=400,height=100,bg="white"):
         super().__init__(master)
@@ -76,9 +77,10 @@ class SettingFrame(tk.Frame):
         pad=10
         title=Title(self,text="タイトル（仮）",font=(u'ＭＳ ゴシック',40),bg=bg)
         title.pack(pady=pad)
+        self.icon1,self.icon2=self.getIcons()
         [self.vars.append(tk.StringVar(master=self,value="default")) for x in range(2) ]
-        CharacterSetting(self,u"先攻",self.vars[0],fill="white",bg=bg).pack(pady=pad)
-        CharacterSetting(self,u"後攻", self.vars[1],fill="black",bg=bg).pack(pady=pad)
+        CharacterSetting(self,u"先攻",self.vars[0],fill="white",bg=bg,image=self.icon1).pack(pady=pad)
+        CharacterSetting(self,u"後攻", self.vars[1],fill="black",bg=bg,image=self.icon2).pack(pady=pad)
 
         bt=tk.Button(self,text="スタート",fg="yellow",font=("",20))
         bt.bind("<Button-1>",self.endCall)
@@ -98,7 +100,10 @@ class SettingFrame(tk.Frame):
         ls= [x.get() for x in self.vars]
         dic={}
         dic["player"]=[ls[0],ls[1]]
+        dic["icon"]=[self.icon1,self.icon2]
         return dic
+    def getIcons(self):
+        return random.sample(glob.glob("./icon/*"),2)
 
 def main():
     h=475
