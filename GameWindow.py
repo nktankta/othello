@@ -1,6 +1,7 @@
 import tkinter as tk
 from Othello_Controll import OthelloController as oc
 from Mask import Mask
+import Funcs
 from IconController import ImageCanvas
 class NameCaller(tk.Frame):
     def __init__(self,master,icon,bg="green"):
@@ -43,6 +44,7 @@ class GameWindow(tk.Frame):
         mask=kwargs.get("mask",Mask.hexagon)
         col=kwargs.get("color",None)
         player=kwargs.get("player",["Player","Player"])
+        winfunc=kwargs.get("winfunc",Funcs.WinnerFunc.centerHigher)
         self.endfunc=kwargs.get("endfunc",lambda: master.quit())
 
         self.icon=kwargs.get("icon",["./icon/1.png","./icon/2.png"])
@@ -54,7 +56,7 @@ class GameWindow(tk.Frame):
         def updateFunc(value,cells):
             self.nc.changeIcon(self.icon[value-1])
             self.cc.update(cells)
-        self.oc = oc(canvas, mask, player=player, color=col, endfunc=self.end, updatefunc=updateFunc)
+        self.oc = oc(canvas, mask, player=player, color=col,winnerFunc=winfunc, endfunc=self.end, updatefunc=updateFunc)
     def end(self,value):
         self.endfunc(self.icon[value-1])
         self.destroy()
@@ -65,12 +67,12 @@ def main():
     ゲーム画面だけのテスト時
     :return:
     '''
-    h = 480
-    w = 425
+    h = 600
+    w = 450
     root = tk.Tk()
     root.geometry(str(w) + "x" + str(h))
 
-    gc=GameWindow(root,w=w,h=h)
+    gc=GameWindow(root,w=w,h=h,mask=Mask.triangle)
     gc.pack()
     root.mainloop()
 

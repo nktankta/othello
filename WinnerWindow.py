@@ -7,13 +7,16 @@ class WinnerFrame(tk.Frame):
         self.endfunc=endfunc
         self.cv=tk.Canvas(self,width=width,height=height-30,bg=bg)
         self.cv.config(highlightbackground=bg)
-        self.cv.create_image(width//2,height//2,image=self.loadImage("./WinImages/star.png",w=300,h=300))
+        for x,y in [(x,y) for x in range(100,500,150) for y in range(100,600,150)]:
+            self.star(x,y)
         self.cv.create_image(width//2,height//2*0.7,image=self.loadImage(image,w=200,h=200))
         self.cv.create_text(width//2,height//2*1.5,text="WIN",font=("",80),fill="white")
         self.cv.pack()
         bt=tk.Button(self,text=u"スタートに戻る")
         bt.bind("<Button-1>", self.end)
         bt.pack(anchor="e")
+    def star(self,x,y,w=200,h=200):
+        self.cv.create_image(x, y , image=self.loadImage("./WinImages/star.png", w=w, h=h))
     def end(self,e):
         if self.endfunc is not None:
             self.endfunc()

@@ -2,7 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image,ImageTk
 import glob
+from Funcs import WinnerFunc as wf
 import random
+from Mask import Mask
 from IconController import ImageCanvas
 class Selector(ttk.Combobox):
     '''
@@ -78,10 +80,11 @@ class SettingFrame(tk.Frame):
         title=Title(self,text="タイトル（仮）",font=(u'ＭＳ ゴシック',40),bg=bg)
         title.pack(pady=pad)
         self.icon1,self.icon2=self.getIcons()
-        [self.vars.append(tk.StringVar(master=self,value="default")) for x in range(2) ]
+        [self.vars.append(tk.StringVar(master=self,value="default")) for x in range(4) ]
         CharacterSetting(self,u"先攻",self.vars[0],fill="white",bg=bg,image=self.icon1).pack(pady=pad)
         CharacterSetting(self,u"後攻", self.vars[1],fill="black",bg=bg,image=self.icon2).pack(pady=pad)
-
+        Selector(self,ls=["more","less","CenterHigh"],var=self.vars[2]).pack(pady=pad)
+        Selector(self, ls=["hexagon","pentagon","square","triangle"], var=self.vars[3]).pack(pady=pad)
         bt=tk.Button(self,text="スタート",fg="yellow",font=("",20))
         bt.bind("<Button-1>",self.endCall)
         bt.pack(pady=pad)
@@ -101,6 +104,10 @@ class SettingFrame(tk.Frame):
         dic={}
         dic["player"]=[ls[0],ls[1]]
         dic["icon"]=[self.icon1,self.icon2]
+        windic={"default":wf.more,"more":wf.more,"less":wf.less,"CenterHigh":wf.centerHigher}
+        dic["winfunc"]=windic[ls[2]]
+        maskdic={"default":Mask.hexagon,"hexagon":Mask.hexagon,"pentagon":Mask.pentagon,"square":Mask.square,"triangle":Mask.triangle}
+        dic["mask"]=maskdic[ls[3]]
         return dic
     def getIcons(self):
         return random.sample(glob.glob("./icon/*"),2)

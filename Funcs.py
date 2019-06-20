@@ -116,3 +116,38 @@ class WinnerFunc:
         elif one<two:
             c=2
         return c
+
+    @staticmethod
+    def less(cells):
+        '''
+        数が少ないほうが勝ち（2人用）
+        :param cells: 置けなくなった盤面
+        :return: 勝者がiの時はiを返す。それ以外の時は0を返す
+        '''
+        c = 0
+        one = np.sum(cells == 2)
+        two = np.sum(cells == 1)
+        if one > two:
+            c = 1
+        elif one < two:
+            c = 2
+        return c
+
+    @staticmethod
+    def centerHigher(cells):
+        '''
+        中心のほうが高得点
+        :param cells: 置けなくなった盤面
+        :return: 勝者がiの時はiを返す。それ以外の時は0を返す
+        '''
+        c=0
+        mask=np.array([[8-abs(j-4)-abs(i-4) for j in range(9)] for i in range(9)])
+        n1=np.where(cells==1,1,0)
+        n2 = np.where(cells == 2, 1, 0)
+        one=np.sum(n1*mask)
+        two=np.sum(n2*mask)
+        if one > two:
+            c = 1
+        elif one < two:
+            c = 2
+        return c

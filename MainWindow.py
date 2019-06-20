@@ -24,7 +24,7 @@ class RootController(tk.Tk):
         self.title(u"リザルト")
 
     def createGame(self,e):  # 実際の画面遷移、もしこれ以上画面作成するなら別でメソッド、クラス化
-        fr = gw.GameWindow(self, w=self.w, h=self.h, player=e["player"], icon=e["icon"], bg=self.bg,endfunc=self.createWin)
+        fr = gw.GameWindow(self, w=self.w, h=self.h, player=e["player"], icon=e["icon"],winfunc=e["winfunc"],mask=e["mask"], bg=self.bg,endfunc=self.createWin)
         fr.pack()
         self.title(u"Othello(仮)")
 def main():
