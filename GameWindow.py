@@ -43,7 +43,7 @@ class GameWindow(tk.Frame):
         mask=kwargs.get("mask",Mask.hexagon)
         col=kwargs.get("color",None)
         player=kwargs.get("player",["Player","Player"])
-        endfunc=kwargs.get("endfunc",lambda: master.quit())
+        self.endfunc=kwargs.get("endfunc",lambda: master.quit())
 
         self.icon=kwargs.get("icon",["./icon/1.png","./icon/2.png"])
         self.nc=NameCaller(self,self.icon[0],bg=bg)
@@ -54,7 +54,10 @@ class GameWindow(tk.Frame):
         def updateFunc(value,cells):
             self.nc.changeIcon(self.icon[value-1])
             self.cc.update(cells)
-        self.oc = oc(canvas, mask, player=player, color=col, endfunc=endfunc, updatefunc=updateFunc)
+        self.oc = oc(canvas, mask, player=player, color=col, endfunc=self.end, updatefunc=updateFunc)
+    def end(self,value):
+        self.endfunc(self.icon[value-1])
+        self.destroy()
 
 
 def main():

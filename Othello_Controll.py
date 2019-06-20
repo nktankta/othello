@@ -84,12 +84,9 @@ class OthelloController:
         '''
         終了時に呼ばれるメソッドで主に勝敗表示などに使う
         '''
-
-        print(self.winner(self.cells.getBoard()))
         if self.endfunc is not None:
-            self.endfunc()
+            self.endfunc(self.winner(self.cells.getBoard()))
         exit()
-
     def pass_(self):
         '''
         パスされた場合に呼ばれるメソッド
