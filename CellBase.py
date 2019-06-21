@@ -1,6 +1,7 @@
 import tkinter as tk
 import numpy as np
 from Mask import Mask
+import time
 class CellBase:
     '''
     Cellの描画のみを行うクラス
@@ -210,7 +211,10 @@ class Cells():
         :param y: 選択されたCellのy位置
         '''
         self.func(x,y)
-
+    def printPass(self):
+        ps=self.canvas.create_text(250,200,text="パス",fill="yellow",font=("",80),justify="center")
+        time.sleep(0.5)
+        self.canvas.delete(ps)
     def create_boad(self,x,y):
         '''
         盤面全体を作成するクラス

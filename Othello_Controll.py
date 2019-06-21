@@ -20,6 +20,7 @@ class OthelloController:
         '''
         self.canvas=canvas
         self.cells=Cells(canvas,30)
+        self.passFunc=self.cells.printPass
         self.mask=mask-1
         self.before=beforeFunc
         self.putable=putableFunc
@@ -94,6 +95,9 @@ class OthelloController:
         self.player=self.player%2+1
         if self.isPass():
             self.end()
+        else:
+            if self.passFunc is not None:
+                self.passFunc()
     def get_Putable(self):
         '''
         置ける場所全て返す関数
