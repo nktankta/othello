@@ -2,6 +2,7 @@ import tkinter as tk
 from Othello_Controll import OthelloController as oc
 from Mask import Mask
 import Funcs
+import numpy as np
 from IconController import ImageCanvas
 class NameCaller(tk.Frame):
     def __init__(self,master,icon,bg="green"):
@@ -58,7 +59,10 @@ class GameWindow(tk.Frame):
             self.cc.update(cells)
         self.oc = oc(canvas, mask, player=player, color=col,winnerFunc=winfunc, endfunc=self.end, updatefunc=updateFunc)
     def end(self,value):
-        self.endfunc(self.icon[value-1])
+        if value==0:
+            self.endfunc()
+        else:
+            self.endfunc(self.icon[value-1])
         self.destroy()
 
 
@@ -74,6 +78,20 @@ def main():
 
     gc=GameWindow(root,w=w,h=h,mask=Mask.triangle)
     gc.pack()
+    hexagon = np.array(
+        [[0, 0, 0, 1, 0, 1, 0, 0, 0],
+         [0, 1, 1, 1, 1, 1, 1, 1, 0],
+         [1, 1, 1, 1, 1, 1, 1, 1, 1],
+         [1, 1, 1, 1, 1, 1, 1, 1, 1],
+         [1, 1, 1, 1, 1, 1, 1, 1, 1],
+         [1, 1, 1, 1, 1, 1, 1, 1, 1],
+         [1, 1, 1, 1, 1, 1, 1, 1, 1],
+         [0, 0, 1, 1, 1, 1, 1, 0, 0],
+         [0, 0, 0, 1, 2, 1, 0, 0, 0],
+         ]
+    )
+    gc.oc.cells.apply_mask(hexagon)
+    gc.oc.player=2
     root.mainloop()
 
 if __name__=="__main__":

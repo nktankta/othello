@@ -212,7 +212,7 @@ class Cells():
         '''
         self.func(x,y)
     def printPass(self):
-        ps=self.canvas.create_text(250,200,text="パス",fill="yellow",font=("",80),justify="center")
+        ps=self.canvas.create_text(225,200,text="パス",fill="yellow",font=("",80),justify="center")
         time.sleep(0.5)
         self.canvas.delete(ps)
     def create_boad(self,x,y):

@@ -85,7 +85,7 @@ class SettingFrame(tk.Frame):
         CharacterSetting(self,u"後攻", self.vars[1],fill="black",bg=bg,image=self.icon2).pack(pady=pad)
         Selector(self,ls=["more","less","CenterHigh"],var=self.vars[2]).pack(pady=pad)
         Selector(self, ls=["hexagon","pentagon","square","triangle"], var=self.vars[3]).pack(pady=pad)
-        bt=tk.Button(self,text="スタート",fg="yellow",font=("",20))
+        bt=tk.Button(self,text="スタート",fg="yellow",font=("",20),bg="light gray")
         bt.bind("<Button-1>",self.endCall)
         bt.pack(pady=pad)
     def endCall(self,event):
