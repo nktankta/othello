@@ -17,7 +17,7 @@ class Selector(ttk.Combobox):
         :param ls: 表示したい内容
         :param var: tk.StringVar型で自動的に更新される
         '''
-        super().__init__(master=master, values=ls,width=7,font=("",10))
+        super().__init__(master=master, values=ls,width=7,font=("",10),state="readonly")
         self.set(ls[0])
         self.master = master
         self.bind('<<ComboboxSelected>>', self.show_selected)
@@ -80,11 +80,12 @@ class SettingFrame(tk.Frame):
         title=Title(self,text="タイトル（仮）",font=(u'ＭＳ ゴシック',40),bg=bg)
         title.pack(pady=pad)
         self.icon1,self.icon2=self.getIcons()
-        [self.vars.append(tk.StringVar(master=self,value="default")) for x in range(4) ]
+        [self.vars.append(tk.StringVar(master=self,value="default")) for x in range(5) ]
         CharacterSetting(self,u"先攻",self.vars[0],fill="white",bg=bg,image=self.icon1).pack(pady=pad)
         CharacterSetting(self,u"後攻", self.vars[1],fill="black",bg=bg,image=self.icon2).pack(pady=pad)
         Selector(self,ls=["more","less","CenterHigh"],var=self.vars[2]).pack(pady=pad)
         Selector(self, ls=["hexagon","pentagon","square","triangle"], var=self.vars[3]).pack(pady=pad)
+        Selector(self, ls=["normal","random"], var=self.vars[4]).pack(pady=pad)
         bt=tk.Button(self,text="スタート",fg="yellow",font=("",20),bg="light gray")
         bt.bind("<Button-1>",self.endCall)
         bt.pack(pady=pad)
@@ -107,7 +108,8 @@ class SettingFrame(tk.Frame):
         windic={"default":wf.more,"more":wf.more,"less":wf.less,"CenterHigh":wf.centerHigher}
         dic["winfunc"]=windic[ls[2]]
         maskdic={"default":Mask.hexagon,"hexagon":Mask.hexagon,"pentagon":Mask.pentagon,"square":Mask.square,"triangle":Mask.triangle}
-        dic["mask"]=maskdic[ls[3]]
+        randomdic={"default":Mask.square,"normal":Mask.square,"random":Mask.random}
+        dic["mask"]=maskdic[ls[3]]*randomdic[ls[4]]
         return dic
     def getIcons(self):
         return random.sample(glob.glob("./icon/*"),2)
