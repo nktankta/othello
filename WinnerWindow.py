@@ -10,19 +10,22 @@ class WinnerFrame(tk.Frame):
         self.endfunc=endfunc
         self.cv=tk.Canvas(self,width=width,height=height-30,bg=bg)
         self.cv.config(highlightbackground=bg)
-        if self.image is not None:
+        for x,y in [(x,y) for x in range(100,500,150) for y in range(100,600,150)]:
+            self.star(x,y)
+        if len(self.image) ==1:
             self.createWin()
         else:
             self.createDraw()
-        bt=tk.Button(self,text=u"スタートに戻る")
+        bt=tk.Button(self,text=u"スタートに戻る",bg="sky blue3",fg="yellow")
         bt.bind("<Button-1>", self.end)
         bt.pack(anchor="e")
     def createDraw(self):
-        pass
+        self.cv.create_image(self.w // 2*0.5, self.h // 2 * 0.7, image=self.loadImage(self.image[1], w=200, h=200))
+        self.cv.create_image(self.w // 2*1.5, self.h // 2 * 0.7, image=self.loadImage(self.image[0], w=200, h=200))
+        self.cv.create_text(self.w // 2, self.h // 2 * 1.5, text="DRAW", font=("", 80), fill="white")
+        self.cv.pack()
     def createWin(self):
-        for x,y in [(x,y) for x in range(100,500,150) for y in range(100,600,150)]:
-            self.star(x,y)
-        self.cv.create_image(self.w//2,self.h//2*0.7,image=self.loadImage(self.image,w=200,h=200))
+        self.cv.create_image(self.w//2,self.h//2*0.7,image=self.loadImage(self.image[0],w=300,h=300))
         self.cv.create_text(self.w//2,self.h//2*1.5,text="WIN",font=("",80),fill="white")
         self.cv.pack()
     def star(self,x,y,w=200,h=200):
@@ -51,7 +54,7 @@ def main():
     root = tk.Tk()
     root.geometry(str(w) + "x" + str(h))
 
-    gc=WinnerFrame(root,image="./icon/1.png",width=w,height=h)
+    gc=WinnerFrame(root,image=["./icon/animal_mark01_buta.png","./icon/animal_mark02_kuma.png"],width=w,height=h)
     gc.pack()
     root.mainloop()
 

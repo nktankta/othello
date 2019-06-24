@@ -60,9 +60,9 @@ class GameWindow(tk.Frame):
         self.oc = oc(canvas, mask, player=player, color=col,winnerFunc=winfunc, endfunc=self.end, updatefunc=updateFunc)
     def end(self,value):
         if value==0:
-            self.endfunc()
+            self.endfunc(self.icon)
         else:
-            self.endfunc(self.icon[value-1])
+            self.endfunc([self.icon[value-1]])
         self.destroy()
 
 

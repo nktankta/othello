@@ -8,14 +8,14 @@ class RootController(tk.Tk):
         super().__init__()
         self.h = 600
         self.w = 450
-        self.bg = "lawn green"
+        self.bg = "sky blue"
         self.configure(bg=self.bg)
         self.geometry(str(self.w) + "x" + str(self.h))
         self.createSetting()
         self.mainloop()
 
     def createSetting(self):
-        fr = sw.SettingFrame(self, endfunc=self.createGame)
+        fr = sw.SettingFrame(self, endfunc=self.createGame,bg=self.bg)
         fr.pack()
         self.title(u"設定")
     def createWin(self,img):

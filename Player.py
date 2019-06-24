@@ -14,7 +14,7 @@ class Player:
     def getValue(self,*args):
         if self.starttime is None:
             self.starttime=time.time()
-        while self.x is None and time.time()-self.starttime<10:
+        while self.x is None and time.time()-self.starttime<0:
             time.sleep(0.1)
         if self.x is not None:
             return self.x,self.y

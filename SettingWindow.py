@@ -66,13 +66,13 @@ class Title(tk.Frame):
 
 
 class SettingFrame(tk.Frame):
-    def __init__(self,master,endfunc=lambda e:print(None)):
+    def __init__(self,master,endfunc=lambda e:print(None),bg="lawn green"):
         '''
         設定画面（仮）の初期化処理
         :param master:上位Frame
         :param endfunc: 決定時に呼ばれる関数
         '''
-        bg="lawn green"
+        bg=bg
         super().__init__(master=master,bg=bg)
         self.endfunc=endfunc
         self.vars=[]
@@ -86,7 +86,7 @@ class SettingFrame(tk.Frame):
         Selector(self,ls=["more","less","CenterHigh"],var=self.vars[2]).pack(pady=pad)
         Selector(self, ls=["hexagon","pentagon","square","triangle"], var=self.vars[3]).pack(pady=pad)
         Selector(self, ls=["normal","random"], var=self.vars[4]).pack(pady=pad)
-        bt=tk.Button(self,text="スタート",fg="yellow",font=("",20),bg="light gray")
+        bt=tk.Button(self,text="スタート",fg="yellow",font=("",20),bg="sky blue3")
         bt.bind("<Button-1>",self.endCall)
         bt.pack(pady=pad)
     def endCall(self,event):
