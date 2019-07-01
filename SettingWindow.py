@@ -10,14 +10,14 @@ class Selector(ttk.Combobox):
     '''
     コンポボックスで、デフォルト値と値変更時に変数変更を行う
     '''
-    def __init__(self, master, ls,var,bg="white"):
+    def __init__(self, master, ls,var,bg="white",width=7):
         '''
         初期化処理
         :param master:上位のtk.Frame
         :param ls: 表示したい内容
         :param var: tk.StringVar型で自動的に更新される
         '''
-        super().__init__(master=master, values=ls,width=7,font=("",10),state="readonly")
+        super().__init__(master=master, values=ls,width=width,font=("",10),state="readonly")
         self.set(ls[0])
         self.master = master
         self.bind('<<ComboboxSelected>>', self.show_selected)
@@ -35,7 +35,7 @@ class CharacterSetting(tk.Frame):
     def __init__(self,master,text="None",var=None,fill="white",bg="white",image="./icon/1.png"):
         super().__init__(master=master,bg=bg)
         tk.Label(self,text=text,font=("",20),bg=bg).pack(side="left",padx=10)
-        Selector(self,["Player","NPC"],var=var,bg=bg).pack(side="left",padx=10)
+        Selector(self,["プレーヤー","NPC"],var=var,bg=bg,width=10).pack(side="left",padx=10)
         ic=ImageCanvas(self,width=50,height=50,bg=bg,image=image)
         ic.pack(side="left",padx=10)
         cv=tk.Canvas(master=self,width=50,height=50,bg=bg)
@@ -77,15 +77,14 @@ class SettingFrame(tk.Frame):
         self.endfunc=endfunc
         self.vars=[]
         pad=10
-        title=Title(self,text="タイトル（仮）",font=(u'ＭＳ ゴシック',40),bg=bg)
+        title=Title(self,text="オセろっかっけい",font=(u'ＭＳ ゴシック',35),bg=bg)
         title.pack(pady=pad)
         self.icon1,self.icon2=self.getIcons()
         [self.vars.append(tk.StringVar(master=self,value="default")) for x in range(5) ]
         CharacterSetting(self,u"先攻",self.vars[0],fill="white",bg=bg,image=self.icon1).pack(pady=pad)
         CharacterSetting(self,u"後攻", self.vars[1],fill="black",bg=bg,image=self.icon2).pack(pady=pad)
-        Selector(self,ls=["more","less","CenterHigh"],var=self.vars[2]).pack(pady=pad)
-        Selector(self, ls=["hexagon","pentagon","square","triangle"], var=self.vars[3]).pack(pady=pad)
-        Selector(self, ls=["normal","random"], var=self.vars[4]).pack(pady=pad)
+        Selector(self, ls=["六角形","四角形","三角形"], var=self.vars[3]).pack(pady=pad)
+        Selector(self, ls=["通常","ランダム"], var=self.vars[4]).pack(pady=pad)
         bt=tk.Button(self,text="スタート",fg="yellow",font=("",20),bg="sky blue3")
         bt.bind("<Button-1>",self.endCall)
         bt.pack(pady=pad)
@@ -103,12 +102,13 @@ class SettingFrame(tk.Frame):
         '''
         ls= [x.get() for x in self.vars]
         dic={}
-        dic["player"]=[ls[0],ls[1]]
+        pf=lambda x:"NPC" if x == "NPC" else "Player"
+        dic["player"]=[pf(ls[0]),pf(ls[1])]
         dic["icon"]=[self.icon1,self.icon2]
         windic={"default":wf.more,"more":wf.more,"less":wf.less,"CenterHigh":wf.centerHigher}
         dic["winfunc"]=windic[ls[2]]
-        maskdic={"default":Mask.hexagon,"hexagon":Mask.hexagon,"pentagon":Mask.pentagon,"square":Mask.square,"triangle":Mask.triangle}
-        randomdic={"default":Mask.square,"normal":Mask.square,"random":Mask.random}
+        maskdic={"default":Mask.hexagon,"六角形":Mask.hexagon,"四角形":Mask.square,"三角形":Mask.triangle}
+        randomdic={"default":Mask.square,"通常":Mask.square,"ランダム":Mask.random}
         dic["mask"]=maskdic[ls[3]]*randomdic[ls[4]]
         return dic
     def getIcons(self):
@@ -119,6 +119,7 @@ def main():
     w=425
     root = tk.Tk()
     root.geometry(str(w)+"x"+str(h))
+    root.geometry()
     root.title(u"設定")
     fr=SettingFrame(root)
     fr.pack()

@@ -10,7 +10,7 @@ class RootController(tk.Tk):
         self.w = 450
         self.bg = "sky blue"
         self.configure(bg=self.bg)
-        self.geometry(str(self.w) + "x" + str(self.h))
+        self.geometry(str(self.w) + "x" + str(self.h)+"+400+20")
         self.createSetting()
         self.mainloop()
 
@@ -26,7 +26,7 @@ class RootController(tk.Tk):
     def createGame(self,e):  # 実際の画面遷移、もしこれ以上画面作成するなら別でメソッド、クラス化
         fr = gw.GameWindow(self, w=self.w, h=self.h, player=e["player"], icon=e["icon"],winfunc=e["winfunc"],mask=e["mask"], bg=self.bg,endfunc=self.createWin)
         fr.pack()
-        self.title(u"Othello(仮)")
+        self.title(u"オセろっかっけい")
 def main():
     RootController()
 
