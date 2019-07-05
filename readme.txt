@@ -6,3 +6,5 @@
 環境
 Python3.7
 Windows10
+ライブラリ
+numpy,TKinter
